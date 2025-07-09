@@ -1,10 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+from database import DBConnection
 
-urls = [
-    "https://www.magazineluiza.com.br/notebook-asus-vivobook-go-15-e1504fa-amd-ryzen-5-7520u-16gb-ram-512gb-ssd-linux-keepos-tela-156-fhd-black-nj1288/p/aebhcg3bch/in/note/",
-    "https://www.magazineluiza.com.br/notebook-asus-vivobook-go-15-amd-ryzen-5-7520u-8gb-ram-512gb-ssd-156-full-hd-windows-11-e1504fa-nj836w/p/240066500/in/nass/?seller_id=magazineluiza"
-]
+db_connection = DBConnection()
+urls = db_connection.get_urls()
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -16,10 +15,9 @@ headers = {
 
 
 for url in urls:
-    r = requests.get(url, headers=headers)
+    r = requests.get(url['link'], headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
 
-    #apenas para o site da magalu
-    product_name = str(soup.find('h1', class_='sc-dcJsrY jjGTqv'))[116:-5]
-    product_price = str(soup.find('p', class_='sc-dcJsrY eLxcFM sc-hgRRfv dfAhbD'))[-12:-4]
-    print(f'{product_name} -> {product_price}')
+    product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
+
+    db_connection.post_check(product_price, url['laptopId'])
