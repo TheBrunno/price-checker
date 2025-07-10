@@ -1,0 +1,1 @@
+ALTER TABLE `laptop` ADD `img` varchar(500);
