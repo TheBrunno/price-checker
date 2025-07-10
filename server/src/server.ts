@@ -6,6 +6,7 @@ import {
 } from 'fastify-type-provider-zod';
 import { fastifyCors } from '@fastify/cors';
 import { env } from './env.ts';
+import { getLaptops } from './http/routes/get-laptops.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 app.register(fastifyCors, {
@@ -14,5 +15,11 @@ app.register(fastifyCors, {
 
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
+
+app.get('/health', () => {
+  return 'OK';
+});
+
+app.register(getLaptops);
 
 app.listen({ port: env.API_PORT })
