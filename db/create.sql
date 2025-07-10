@@ -18,8 +18,8 @@ create table laptop(
 
 create table laptop_seller(
 	id int primary key auto_increment,
-    fkLaptop int,
-    fkSeller int,
+    fk_laptop int,
+    fk_seller int,
     
     foreign key(fkLaptop) references laptop(id),
     foreign key(fkSeller) references seller(id)

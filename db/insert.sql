@@ -10,6 +10,13 @@ values (
     'Ryzen 5 7520U',
     16	
 );
+desc laptop_seller;
 
-insert into laptop_seller(fkLaptop, fkSeller)
+insert into laptop_seller(fk_laptop, fk_seller)
 values (1, 1);
+
+select sel.id sellerId, lap.id laptopId, seller, product_tag_price, product_class_price, link from seller sel
+inner join laptop_seller ls on sel.id = ls.fk_seller
+inner join laptop lap on ls.fk_laptop = lap.id;
+
+select * from checks;
