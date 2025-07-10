@@ -17,8 +17,8 @@ class DBConnection:
     def get_urls(self):
         self.cursor.execute("""
                     select lap.id laptopId, product_tag_price, product_class_price, link from seller sel
-                        inner join laptop_seller ls on sel.id = ls.fkSeller
-                        inner join laptop lap on ls.fkLaptop = lap.id;
+                        inner join laptop_seller ls on sel.id = ls.fk_seller
+                        inner join laptop lap on ls.fk_laptop = lap.id;
                     """)
 
         urlsResponse = self.cursor.fetchall()
@@ -36,7 +36,9 @@ class DBConnection:
         return urls
     
     def post_check(self, price, fklaptop):
-        sql = "insert into checks (price, fklaptop) values (%s, %s)"
+        if price == '':
+            price = 'Não disponível'
+        sql = "insert into `check` (price, fk_laptop) values (%s, %s)"
         val = (price, fklaptop)
         self.cursor.execute(sql, val)
 
