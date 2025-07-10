@@ -4,6 +4,6 @@ import { laptop } from "./laptop.ts";
 export const check = mysqlTable('check', {
     id: int().autoincrement().primaryKey(),
     price: varchar({ length: 20 }).notNull(),
-    fkLaptop: int().notNull().references(() => laptop.id),
-    checkAt: timestamp().defaultNow().notNull()
+    fk_laptop: int().notNull().references(() => laptop.id),
+    check_at: timestamp().defaultNow().notNull()
 })
