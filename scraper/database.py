@@ -16,7 +16,7 @@ class DBConnection:
 
     def get_urls(self):
         self.cursor.execute("""
-            select lap.id laptopId, product_tag_price, product_class_price, link from seller sel
+            select lap.id laptopId, product_tag_price, product_class_price, link, captcha_page_identifier from seller sel
                 inner join laptop_seller ls on sel.id = ls.fk_seller
                 inner join laptop lap on ls.fk_laptop = lap.id;
         """)
@@ -30,7 +30,8 @@ class DBConnection:
             "laptopId": url[0],
             "product_tag_price": url[1],
             "product_class_price": url[2],
-            "link": url[3]
+            "link": url[3],
+            "captcha_page_identifier": url[4]
         })
 
         return urls

@@ -61,7 +61,7 @@ for url in urls:
     r = requests.get(url['link'], headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
 
-    if r.text.find('Incidente ID') == -1:
+    if r.text.find(url['captcha_page_identifier']) == -1:
         sleep(2)
         product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
         print(product_price)

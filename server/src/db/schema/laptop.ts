@@ -5,5 +5,6 @@ export const laptop = mysqlTable('laptop', {
     model: varchar({ length: 500 }).notNull(),
     processor: varchar({ length: 20 }).notNull(),
     ram: int().notNull(),
-    img: varchar({ length: 500 })
+    img: varchar({ length: 500 }),
+    expected_price: varchar({ length: 20 }).notNull()
 })
