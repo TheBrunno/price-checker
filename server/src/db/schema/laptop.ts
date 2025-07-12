@@ -1,4 +1,4 @@
-import { mysqlTable, int, varchar } from "drizzle-orm/mysql-core";
+import { mysqlTable, int, varchar, float } from "drizzle-orm/mysql-core";
 
 export const laptop = mysqlTable('laptop', {
     id: int().autoincrement().primaryKey(),
@@ -6,5 +6,5 @@ export const laptop = mysqlTable('laptop', {
     processor: varchar({ length: 20 }).notNull(),
     ram: int().notNull(),
     img: varchar({ length: 500 }),
-    expected_price: varchar({ length: 20 }).notNull()
+    expected_price: float().notNull()
 })

@@ -6,37 +6,35 @@ from time import sleep
 
 def generate_random_headers():
     user_agents = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 "
-        "(KHTML, like Gecko) Version/14.0 Safari/605.1.15",
-
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
-
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) "
-        "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
-
-        "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
+        "Mozilla/5.0 (Linux; Android 13; SM-S911B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.90 Mobile Safari/537.36",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        "Mozilla/5.0 (iPad; CPU OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/117.0.2045.60 Chrome/117.0.5938.62 Safari/537.36",
+        "Mozilla/5.0 (Linux; Android 10; moto g(9) play) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.196 Mobile Safari/537.36"
     ]
 
     referers = [
         "https://www.google.com/",
         "https://www.bing.com/",
+        "https://www.ecosia.org/",
         "https://duckduckgo.com/",
-        "https://www.yahoo.com/"
+        "https://www.startpage.com/"
     ]
 
     headers = {
         "User-Agent": random.choice(user_agents),
         "Accept": random.choice([
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "application/json, text/plain, */*"
         ]),
         "Accept-Language": random.choice([
             "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-            "pt-BR,pt;q=0.9"
+            "en-US,en;q=0.9,pt-BR;q=0.8",
+            "pt;q=0.9,en;q=0.8"
         ]),
         "Referer": random.choice(referers)
     }
@@ -45,13 +43,17 @@ def generate_random_headers():
         headers["Accept-Encoding"] = "gzip, deflate, br"
     if random.random() < 0.5:
         headers["Connection"] = "keep-alive"
-    if random.random() < 0.3:
+    if random.random() < 0.4:
         headers["DNT"] = "1"
-    if random.random() < 0.5:
+    if random.random() < 0.6:
         headers["Upgrade-Insecure-Requests"] = "1"
+    if random.random() < 0.3:
+        headers["Sec-Fetch-Dest"] = "document"
+        headers["Sec-Fetch-Mode"] = "navigate"
+        headers["Sec-Fetch-Site"] = "none"
+        headers["Sec-Fetch-User"] = "?1"
 
     return headers
-
 
 db_connection = DBConnection()
 urls = db_connection.get_urls()
@@ -60,12 +62,16 @@ for url in urls:
     headers = generate_random_headers()
     r = requests.get(url['link'], headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
+    
+    sleep(5)
 
     if r.text.find(url['captcha_page_identifier']) == -1:
-        sleep(2)
-        product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
-        print(product_price)
+        sleep(5)
 
+        product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
+        
+        sleep(5)
+        print(product_price)
         db_connection.post_check(product_price, url['laptopId'])
     else:
         print('Página de CAPTCHA')

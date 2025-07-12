@@ -29,6 +29,20 @@
       "when": 1752286137709,
       "tag": "0003_faulty_malice",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1752287148952,
+      "tag": "0004_wealthy_secret_warriors",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1752289246822,
+      "tag": "0005_volatile_justin_hammer",
+      "breakpoints": true
     }
   ]
 }

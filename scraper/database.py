@@ -38,14 +38,21 @@ class DBConnection:
     
     def post_check(self, price, fklaptop):
         if price == '':
-            price = 'Não disponível'
+            price = None
+        else:
+            price = float(price.replace('.', '').replace(',', '.'))
 
         self.cursor.execute(f"""
             select price from `check`
             where check_at = (select max(check_at) cheks from `check` where fk_laptop = {fklaptop});
         """)
 
-        lastPrice = self.cursor.fetchall()[0][0]
+        try:
+            lastPrice = self.cursor.fetchall()[0][0]
+        except:
+            lastPrice = 'sem registros'
+
+        print(price, lastPrice)
 
         if(price != lastPrice):
             sql = "insert into `check` (price, fk_laptop) values (%s, %s)"
