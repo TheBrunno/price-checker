@@ -2,6 +2,7 @@ import requests
 import random
 from bs4 import BeautifulSoup
 from database import DBConnection
+from time import sleep
 
 def generate_random_headers():
     user_agents = [
@@ -60,6 +61,11 @@ for url in urls:
     r = requests.get(url['link'], headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
 
-    product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
+    if r.text.find('Incidente ID') == -1:
+        sleep(2)
+        product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
+        print(product_price)
 
-    db_connection.post_check(product_price, url['laptopId'])
+        db_connection.post_check(product_price, url['laptopId'])
+    else:
+        print('Página de CAPTCHA')
