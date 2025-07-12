@@ -16,10 +16,10 @@ class DBConnection:
 
     def get_urls(self):
         self.cursor.execute("""
-                    select lap.id laptopId, product_tag_price, product_class_price, link from seller sel
-                        inner join laptop_seller ls on sel.id = ls.fk_seller
-                        inner join laptop lap on ls.fk_laptop = lap.id;
-                    """)
+            select lap.id laptopId, product_tag_price, product_class_price, link from seller sel
+                inner join laptop_seller ls on sel.id = ls.fk_seller
+                inner join laptop lap on ls.fk_laptop = lap.id;
+        """)
 
         urlsResponse = self.cursor.fetchall()
         
@@ -38,8 +38,20 @@ class DBConnection:
     def post_check(self, price, fklaptop):
         if price == '':
             price = 'Não disponível'
-        sql = "insert into `check` (price, fk_laptop) values (%s, %s)"
-        val = (price, fklaptop)
-        self.cursor.execute(sql, val)
 
-        self.mydb.commit()
+        self.cursor.execute(f"""
+            select price from `check`
+            where check_at = (select max(check_at) cheks from `check` where fk_laptop = {fklaptop});
+        """)
+
+        lastPrice = self.cursor.fetchall()[0][0]
+
+        if(price != lastPrice):
+            sql = "insert into `check` (price, fk_laptop) values (%s, %s)"
+            val = (price, fklaptop)
+            self.cursor.execute(sql, val)
+
+            self.mydb.commit()
+            print("Registro diferente, inserido no DB.")
+        else:
+            print("Não inserido no DB pois é igual ao último registro.")
