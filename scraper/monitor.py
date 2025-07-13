@@ -1,8 +1,10 @@
 import requests
 import random
+
 from bs4 import BeautifulSoup
 from database import DBConnection
 from time import sleep
+from telegram_bot import send_telegram_message
 
 def generate_random_headers():
     user_agents = [
@@ -61,6 +63,9 @@ urls = db_connection.get_urls()
 for url in urls:
     headers = generate_random_headers()
     r = requests.get(url['link'], headers=headers)
+    sleep(5)
+    print(r.text)
+    
     soup = BeautifulSoup(r.text, 'html.parser')
     
     sleep(5)
@@ -69,9 +74,19 @@ for url in urls:
         sleep(5)
 
         product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
+        print("Valor capturado:", product_price)
+
+        if product_price == '':
+            product_price = None
+        else:
+            product_price = float(product_price.replace('.', '').replace(',', '.'))
         
         sleep(5)
-        print(product_price)
-        db_connection.post_check(product_price, url['laptopId'])
+        if db_connection.post_check(product_price, url['laptopId']) and product_price:
+            if product_price < float(url['expected_price']):
+                send_telegram_message(f"""
+                    Olá, o seu produto <b><u>{url["model"]}</u></b> com <b>{url["ram"]}GB ram</b>, que usa o processador <b>{url["processor"]}</b> está custando apenas <b>R${product_price}</b>, corre!!!
+                """)
+
     else:
         print('Página de CAPTCHA')

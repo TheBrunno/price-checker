@@ -16,7 +16,7 @@ class DBConnection:
 
     def get_urls(self):
         self.cursor.execute("""
-            select lap.id laptopId, product_tag_price, product_class_price, link, captcha_page_identifier from seller sel
+            select lap.id laptopId, product_tag_price, product_class_price, link, captcha_page_identifier, expected_price, model, ram, processor from seller sel
                 inner join laptop_seller ls on sel.id = ls.fk_seller
                 inner join laptop lap on ls.fk_laptop = lap.id;
         """)
@@ -31,17 +31,30 @@ class DBConnection:
             "product_tag_price": url[1],
             "product_class_price": url[2],
             "link": url[3],
-            "captcha_page_identifier": url[4]
+            "captcha_page_identifier": url[4],
+            "expected_price": url[5],
+            "model": url[6],
+            "ram": url[7],
+            "processor": url[8]
         })
 
         return urls
     
     def post_check(self, price, fklaptop):
-        if price == '':
-            price = None
-        else:
-            price = float(price.replace('.', '').replace(',', '.'))
+        if not self.is_equal_last_price(price, fklaptop):
+            sql = f"insert into `check` (price, fk_laptop) values (%s, %s)"
+            val = (price, fklaptop)
+            self.cursor.execute(sql, val)
 
+            self.mydb.commit()
+            print("Registro diferente, inserido no DB.")
+            return True
+        else:
+            print("Não inserido no DB pois é igual ao último registro.")
+            return False
+
+
+    def is_equal_last_price(self, price, fklaptop):
         self.cursor.execute(f"""
             select price from `check`
             where check_at = (select max(check_at) cheks from `check` where fk_laptop = {fklaptop});
@@ -52,14 +65,5 @@ class DBConnection:
         except:
             lastPrice = 'sem registros'
 
-        print(price, lastPrice)
-
-        if(price != lastPrice):
-            sql = "insert into `check` (price, fk_laptop) values (%s, %s)"
-            val = (price, fklaptop)
-            self.cursor.execute(sql, val)
-
-            self.mydb.commit()
-            print("Registro diferente, inserido no DB.")
-        else:
-            print("Não inserido no DB pois é igual ao último registro.")
+        print(f"Preço capturado: {price}\nÚltimo valor no BD: {lastPrice}")
+        return price == lastPrice
