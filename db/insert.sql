@@ -1,7 +1,7 @@
 use price_checker;
 
-insert into seller(seller, product_tag_price, product_class_price, captcha_page_identifier)
-values ('Magazine Luiza', 'p', 'sc-dcJsrY eLxcFM sc-hgRRfv dfAhbD', 'Incidente ID');
+insert into seller(seller, product_tag_price, product_class_price, captcha_page_identifier, product_html_attribute_price, product_html_attribute_value_price)
+values ('Magazine Luiza', 'p', 'sc-dcJsrY eLxcFM sc-hgRRfv dfAhbD', 'Incidente ID', 'data-testid', 'price-value');
 
 insert into laptop(model, processor, ram, expected_price)
 values (
