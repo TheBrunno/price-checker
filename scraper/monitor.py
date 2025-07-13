@@ -63,25 +63,29 @@ urls = db_connection.get_urls()
 for url in urls:
     headers = generate_random_headers()
     r = requests.get(url['link'], headers=headers)
-    sleep(5)
     print(r.text)
     
     soup = BeautifulSoup(r.text, 'html.parser')
     
-    sleep(5)
 
     if r.text.find(url['captcha_page_identifier']) == -1:
-        sleep(5)
 
-        product_price = str(soup.find(url['product_tag_price'], class_=url['product_class_price']))[-12:-4]
-        print("Valor capturado:", product_price)
+        product_price_html = soup.find(
+            url['product_tag_price'], 
+            attrs={
+                url["product_html_attribute_price"]: url["product_html_attribute_value_price"].split(' ')
+            }
+        )
+
+        product_price_html = str(product_price_html)
+
+        product_price = product_price_html[product_price_html.find('R$')+3:product_price_html.find(',')+3]
 
         if product_price == '':
             product_price = None
         else:
             product_price = float(product_price.replace('.', '').replace(',', '.'))
         
-        sleep(5)
         if db_connection.post_check(product_price, url['laptopId']) and product_price:
             if product_price < float(url['expected_price']):
                 send_telegram_message(f"""
