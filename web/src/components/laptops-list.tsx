@@ -1,24 +1,37 @@
+import { dayjs } from "@/lib/dayjs";
+import { useLaptops } from "./http/use-laptops";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 export function LaptopsList(){
-    const data = [1, 2, 3];
+    const { data, isLoading } = useLaptops();
 
     return (
         <div className="flex flex-wrap w-full gap-2 mt-6 px-10 justify-center">
-            {data.map((laptop) => {
+            {isLoading && (
+                <p className="text-muted-foreground text-sm">Carregando notebooks...</p>
+            )}
+            {data?.map((laptop) => {
                 return(
                     <Card className="w-72">
                         <CardHeader>
                             <CardTitle>
-                                Notebook ASUS Vivobook Go 15
+                                {laptop.model}
                             </CardTitle>
-                            <img src="assets/laptop.png" />
+                            {
+                                laptop.img ?
+                                (
+                                    <img src={laptop.img} />
+                                ) :
+                                (
+                                    <img src="assets/laptop.png" />
+                                )
+                            }
                             <Badge variant="secondary">
-                                Ram: 16GB
+                                Ram: {laptop.ram}GB
                             </Badge>
                             <Badge variant="secondary">
-                                Processador: Ryzen 5 7520U
+                                Processador: {laptop.processor}
                             </Badge>
                         </CardHeader>
                         <CardContent>
@@ -29,10 +42,10 @@ export function LaptopsList(){
                                             Última leitura
                                         </CardDescription>
                                         <CardTitle className="text-blue-400">
-                                            R$ 1749,90
+                                            R$ {laptop.price.toFixed(2).replace('.', ',')}
                                         </CardTitle>
                                         <CardDescription className="text-xs">
-                                            Há 2 horas atrás
+                                            {dayjs(laptop.checkedAt).toNow()}
                                         </CardDescription>
                                     </div>
                                     <div>
@@ -40,7 +53,7 @@ export function LaptopsList(){
                                             Valor meta
                                         </CardDescription>
                                         <CardTitle className="text-yellow-300">
-                                            R$ 1229,90
+                                            R$ {laptop.expectedValue.toFixed(2).replace('.', ',')}
                                         </CardTitle>
                                     </div>
                                 </CardHeader>
