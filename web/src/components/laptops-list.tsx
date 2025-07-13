@@ -31,14 +31,9 @@ export function LaptopsList(){
                                         <CardTitle className="text-blue-400">
                                             R$ 1749,90
                                         </CardTitle>
-                                    </div>
-                                    <div>
-                                        <CardDescription>
-                                            Menor leitura
+                                        <CardDescription className="text-xs">
+                                            Há 2 horas atrás
                                         </CardDescription>
-                                        <CardTitle className="text-green-300">
-                                            R$ 1329,90
-                                        </CardTitle>
                                     </div>
                                     <div>
                                         <CardDescription>
@@ -50,9 +45,6 @@ export function LaptopsList(){
                                     </div>
                                 </CardHeader>
                             </Card>
-                            <Badge className="bg-blue-600 text-white mx-0.5 mt-2">Magalu</Badge>
-                            <Badge className="bg-blue-600 text-white mx-0.5 mt-2">Casas Bahia</Badge>
-                            <Badge className="bg-blue-600 text-white mx-0.5 mt-2">Americanas</Badge>
                         </CardContent>
                     </Card>
                 )
