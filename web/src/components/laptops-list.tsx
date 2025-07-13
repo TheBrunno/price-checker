@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 export function LaptopsList(){
     const { data, isLoading } = useLaptops();
 
+    console.log(data)
+
     return (
         <div className="flex flex-wrap w-full gap-2 mt-6 px-10 justify-center">
             {isLoading && (
@@ -13,7 +15,7 @@ export function LaptopsList(){
             )}
             {data?.map((laptop) => {
                 return(
-                    <Card className="w-72">
+                    <Card className="w-72" key={laptop.id}>
                         <CardHeader>
                             <CardTitle>
                                 {laptop.model}
@@ -42,7 +44,15 @@ export function LaptopsList(){
                                             Última leitura
                                         </CardDescription>
                                         <CardTitle className="text-blue-400">
-                                            R$ {laptop.price.toFixed(2).replace('.', ',')}
+                                            {
+                                                laptop.price ?
+                                                (
+                                                    'R$ '+laptop.price.toFixed(2).replace('.', ',')
+                                                ) :
+                                                (
+                                                    'Não disponível'
+                                                )
+                                            }
                                         </CardTitle>
                                         <CardDescription className="text-xs">
                                             {dayjs(laptop.checkedAt).toNow()}
