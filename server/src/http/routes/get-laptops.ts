@@ -31,11 +31,11 @@ export const getLaptops: FastifyPluginCallbackZod = (app) => {
         checkedAt: schema.check.check_at,
       })
       .from(schema.laptop)
-      .innerJoin(
+      .leftJoin(
         subquery,
         eq(schema.laptop.id, subquery.fkLaptop)
       )
-      .innerJoin(
+      .leftJoin(
         schema.check,
         and(
           eq(schema.check.fk_laptop, subquery.fkLaptop),

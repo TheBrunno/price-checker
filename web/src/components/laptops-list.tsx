@@ -55,7 +55,7 @@ export function LaptopsList(){
                                             }
                                         </CardTitle>
                                         <CardDescription className="text-xs">
-                                            {dayjs(laptop.checkedAt).toNow()}
+                                            {dayjs(laptop.checkedAt).fromNow()}
                                         </CardDescription>
                                     </div>
                                     <div>
