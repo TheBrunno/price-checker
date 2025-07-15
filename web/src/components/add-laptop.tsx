@@ -11,7 +11,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateLaptops } from "./http/use-create-laptop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSellers } from "./http/use-sellers";
 
 
 const FormSchema = z.object({
@@ -51,19 +52,24 @@ const FormSchema = z.object({
 export function AddLaptop() {
     const [open, setOpen] = useState(false);
     const { mutateAsync: createLaptop } = useCreateLaptops();
+    const { data: sellers } = useSellers();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema) as any,
         defaultValues: {
             image: undefined,
-            sellers: [
-                { id: 1, name: "Magazine Luiza", url: "" },
-                { id: 2, name: "Americanas", url: "" },
-                { id: 3, name: "Amazon", url: "" },
-                { id: 4, name: "Casas Bahia", url: "" }
-            ]
+            sellers: []
         }
     })
+
+    useEffect(() => {
+        if (!sellers || sellers.length === 0) return;
+
+        form.reset({
+            ...form.getValues(),
+            sellers
+        });
+    }, [sellers]);
 
     const { fields } = useFieldArray({
         control: form.control,
@@ -85,7 +91,7 @@ export function AddLaptop() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger 
+            <DialogTrigger
                 className="bg-card border rounded p-3 fixed right-18 bottom-18 cursor-pointer hover:bg-zinc-700 hover:transition-colors"
                 onClick={() => setOpen(true)}
             >

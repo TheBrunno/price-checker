@@ -3,3 +3,7 @@ GET http://localhost:3333/health
 ###
 
 GET http://localhost:3333/laptops
+
+###
+
+GET http://localhost:3333/sellers
