@@ -10,6 +10,8 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useCreateLaptops } from "./http/use-create-laptop";
+import { useState } from "react";
 
 
 const FormSchema = z.object({
@@ -47,6 +49,9 @@ const FormSchema = z.object({
 })
 
 export function AddLaptop() {
+    const [open, setOpen] = useState(false);
+    const { mutateAsync: createLaptop } = useCreateLaptops();
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema) as any,
         defaultValues: {
@@ -65,13 +70,25 @@ export function AddLaptop() {
         name: "sellers"
     })
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data) // enviar para a api
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+        console.log(await createLaptop({
+            ...data,
+            image: data.image ?? undefined,
+            sellers: data.sellers.map(seller => ({
+                ...seller,
+                url: seller.url ?? undefined
+            }))
+        }));
+        form.reset();
+        setOpen(false)
     }
 
     return (
-        <Dialog>
-            <DialogTrigger className="bg-card border rounded p-3 fixed right-18 bottom-18 cursor-pointer hover:bg-zinc-700 hover:transition-colors">
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger 
+                className="bg-card border rounded p-3 fixed right-18 bottom-18 cursor-pointer hover:bg-zinc-700 hover:transition-colors"
+                onClick={() => setOpen(true)}
+            >
                 <Plus />
             </DialogTrigger>
             <DialogContent>
