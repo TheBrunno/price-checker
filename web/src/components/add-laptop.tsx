@@ -40,6 +40,7 @@ const FormSchema = z.object({
     }).optional(),
 
     sellers: z.array(z.object({
+        id: z.number(),
         name: z.string(),
         url: z.string().optional()
     }))
@@ -51,10 +52,10 @@ export function AddLaptop() {
         defaultValues: {
             image: undefined,
             sellers: [
-                { name: "Magazine Luiza", url: "" },
-                { name: "Americanas", url: "" },
-                { name: "Amazon", url: "" },
-                { name: "Casas Bahia", url: "" }
+                { id: 1, name: "Magazine Luiza", url: "" },
+                { id: 2, name: "Americanas", url: "" },
+                { id: 3, name: "Amazon", url: "" },
+                { id: 4, name: "Casas Bahia", url: "" }
             ]
         }
     })
