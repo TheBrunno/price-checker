@@ -23,10 +23,10 @@ export function LaptopsList(){
                             {
                                 laptop.img ?
                                 (
-                                    <img src={laptop.img} />
+                                    <img src={"http://localhost:3333/uploads/"+laptop.img} className="block m-auto h-60" />
                                 ) :
                                 (
-                                    <img src="assets/laptop.png" />
+                                    <img src="assets/laptop.png" className="block m-auto h-60" />
                                 )
                             }
                             <Badge variant="secondary">
