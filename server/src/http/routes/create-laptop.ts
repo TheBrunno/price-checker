@@ -1,6 +1,5 @@
 import { db } from "../../db/connection.ts";
 import { schema } from "../../db/schema/index.ts";
-import { eq, and, sql } from "drizzle-orm";
 import type { FastifyPluginCallbackZod } from "fastify-type-provider-zod";
 import { z } from 'zod';
 
