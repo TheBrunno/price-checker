@@ -3,7 +3,7 @@ export type CreateLaptopRequest = {
     ram: number;
     processor: string;
     expected_value: number;
-    image: File | undefined;
+    image: FormData;
     sellers: Array<{
         id: number;
         name: string;

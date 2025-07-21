@@ -7,15 +7,21 @@ export function useCreateLaptops(){
 
     return useMutation({
         mutationFn: async (data: CreateLaptopRequest) => {
-            const response = await fetch('http://localhost:3333/laptops', {
+            const { image, ...firstBody } = data
+            let response = await fetch('http://localhost:3333/laptops', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(firstBody)
             })
 
             const result:CreateLaptopResponse = await response.json();
+
+            response = await fetch('http://localhost:3333/laptops/upload/'+result.laptopId, {
+                method: 'POST',
+                body: image
+            })
 
             return result;
         },

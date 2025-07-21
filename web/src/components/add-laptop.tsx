@@ -77,14 +77,19 @@ export function AddLaptop() {
     })
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(await createLaptop({
+        const formdata = new FormData();
+
+        if(data.image){
+            formdata.append('image', data.image);
+        }
+        await createLaptop({
             ...data,
-            image: data.image ?? undefined,
+            image: formdata,
             sellers: data.sellers.map(seller => ({
                 ...seller,
                 url: seller.url ?? undefined
             }))
-        }));
+        });
         form.reset();
         setOpen(false)
     }

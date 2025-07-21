@@ -1,3 +1,3 @@
-export type CreateLaptopResponse = Array<{
+export type CreateLaptopResponse = {
     laptopId: string;
-}>;
+};

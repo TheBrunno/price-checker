@@ -41,7 +41,7 @@ export const postLaptop: FastifyPluginCallbackZod = (app) => {
 			})
 		}
 	}, async (request, reply) => {
-		const { model, processor, ram, expected_value, image, sellers } = request.body;
+		const { model, processor, ram, expected_value, sellers } = request.body;
 
 		const result = await db.insert(schema.laptop).values({
 			model, 

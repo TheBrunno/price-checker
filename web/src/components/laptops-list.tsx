@@ -2,6 +2,7 @@ import { dayjs } from "@/lib/dayjs";
 import { useLaptops } from "./http/use-laptops";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Laptop } from "lucide-react";
 
 export function LaptopsList(){
     const { data, isLoading } = useLaptops();
@@ -26,7 +27,7 @@ export function LaptopsList(){
                                     <img src={"http://localhost:3333/uploads/"+laptop.img} className="block m-auto h-60" />
                                 ) :
                                 (
-                                    <img src="assets/laptop.png" className="block m-auto h-60" />
+                                    <Laptop className="block m-auto h-60 text-zinc-300" size='150px' />
                                 )
                             }
                             <Badge variant="secondary">
