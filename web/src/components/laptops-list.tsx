@@ -21,15 +21,17 @@ export function LaptopsList(){
                             <CardTitle>
                                 {laptop.model}
                             </CardTitle>
-                            {
-                                laptop.img ?
-                                (
-                                    <img src={"http://localhost:3333/uploads/"+laptop.img} className="block m-auto h-60" />
-                                ) :
-                                (
-                                    <Laptop className="block m-auto h-60 text-zinc-300" size='150px' />
-                                )
-                            }
+                            <div className="h-60 flex items-center justify-center">
+                                {
+                                    laptop.img ?
+                                    (
+                                        <img src={"http://localhost:3333/uploads/"+laptop.img} className="block m-auto" />
+                                    ) :
+                                    (
+                                        <Laptop className="block m-auto h-60 text-zinc-300" size='150px' />
+                                    )
+                                }
+                            </div>
                             <Badge variant="secondary">
                                 Ram: {laptop.ram}GB
                             </Badge>

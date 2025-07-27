@@ -44,6 +44,3 @@ for url in urls:
 
     else:
         print('Página de CAPTCHA')
-        send_telegram_message(f"""
-            Estou caindo no CAPTCHA :(
-        """)
